@@ -1,0 +1,22 @@
+# Banco PostgreSQL para a aplicação. Suba com: docker compose up -d
+services:
+  postgres:
+    image: postgres:17
+    container_name: lms-postgres
+    environment:
+      POSTGRES_DB: lms
+      POSTGRES_USER: lms
+      POSTGRES_PASSWORD: lms
+    ports:
+      - "5432:5432"
+    volumes:
+      # os dados sobrevivem a "docker compose down" (use "down -v" para apagar)
+      - lms-dados:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lms -d lms"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  lms-dados:
